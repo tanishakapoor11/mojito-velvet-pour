@@ -65,6 +65,13 @@ const Hero = () => {
         const addScrub = () => tl.to(video, { currentTime: video.duration });
         if (video.readyState >= 1) addScrub();
         else video.onloadedmetadata = addScrub;
+
+        // iOS Safari ignores preload and won't load the video (it shows as a black box) until
+        // it has been played once, so play+pause it; retry on first touch if autoplay is blocked (Low Power Mode)
+        const prime = () => video.play()?.then(() => video.pause()).catch(() => {});
+        prime();
+        window.addEventListener('touchstart', prime, { once: true, passive: true });
+        return () => window.removeEventListener('touchstart', prime);
     }, [])
   return (
     <>
