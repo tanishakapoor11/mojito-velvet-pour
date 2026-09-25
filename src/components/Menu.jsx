@@ -10,17 +10,19 @@ const Menu = () => {
   const contentRef = useRef()
   const directionRef = useRef(-1) // -1: enter from left (next), 1: enter from right (prev)
 
+  // same swing-in-from-the-corner parallax as the Contact leaves
   useGSAP(() => {
     gsap.timeline({
       scrollTrigger: {
         trigger: '#menu',
-        start: 'top 30%',
-        end: 'bottom 80%',
-        scrub: true,
-      }
+        start: 'top bottom',
+        end: 'center center',
+        scrub: 1,
+      },
+      defaults: { ease: 'none' },
     })
-    .from('#m-left-leaf', { x: -100, y: 100 })
-    .from('#m-right-leaf', { x: 100, y: 100 })
+    .from('#m-right-leaf', { xPercent: 40, yPercent: -40, rotate: 15, transformOrigin: 'top right' }, 0)
+    .from('#m-left-leaf', { xPercent: -40, yPercent: 40, rotate: -15, transformOrigin: 'bottom left' }, 0)
   }, []);
 
   useGSAP(() => {
